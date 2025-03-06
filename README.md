@@ -5,3 +5,6 @@ VM Assembler Project
 
 > mcs -langversion:7.2 -out:Assembler.exe Main.cs IInstruction.cs Instructions.cs ...
 
+### run with:
+
+> mono Assembler.exe <file.asm>
