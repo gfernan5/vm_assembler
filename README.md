@@ -1,2 +1,7 @@
 # vm_assembler
 VM Assembler Project
+
+### compile with:
+
+> mcs -langversion:7.2 -out:Assembler.exe Main.cs IInstruction.cs Instructions.cs ...
+
