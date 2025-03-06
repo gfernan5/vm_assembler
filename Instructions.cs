@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 public class Dup : IInstruction {
     private readonly int _offset;
     public Dup(int offset) {
