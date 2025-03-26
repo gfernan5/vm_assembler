@@ -13,14 +13,30 @@
  {
     public static void Main(string[] args)
     {
+        int programCounter = 0;
+
         // check CMD line arguments
         if (args.Length != 2) {
             Console.Error.WriteLine("Usage: assemble <file.asm> <file.v>");
             return;
         }
 
-        // open asm file
-        
+        // open asm file and set up StreamReader
+        StreamReader sr;
+        string fileName = args[0]?.Trim() ?? string.Empty;
 
+        try {
+            sr = new StreamReader(fileName);
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.Message);
+            return;
+        }
+
+        // read file line by line
+        string line;
+        while ((line = sr.ReadLine()) != null) {
+            
+        }
     }
  }
