@@ -36,7 +36,15 @@
         // read file line by line
         string line;
         while ((line = sr.ReadLine()) != null) {
-            
+            string[] data = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var s in data) {
+                if (s == "#") {
+                    break;
+                } else {
+                    Console.WriteLine(s);
+                }
+            }
+            Console.WriteLine(++programCounter);
         }
     }
  }
