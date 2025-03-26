@@ -7,11 +7,20 @@
  */
 
  using System;
+ using System.IO;
 
  class Assembler
  {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Assembler");
+        // check CMD line arguments
+        if (args.Length != 2) {
+            Console.Error.WriteLine("Usage: assemble <file.asm> <file.v>");
+            return;
+        }
+
+        // open asm file
+        
+
     }
  }
