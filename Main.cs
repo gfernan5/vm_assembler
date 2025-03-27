@@ -6,11 +6,11 @@
  * Brief: Assembler starting point.
  */
 
- using System;
- using System.IO;
+using System;
+using System.IO;
 
- class Assembler
- {
+class Assembler
+{
     public static void Main(string[] args)
     {
         int programCounter = 0;
@@ -36,15 +36,24 @@
         // read file line by line
         string line;
         while ((line = sr.ReadLine()) != null) {
-            string[] data = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var s in data) {
-                if (s == "#") {
-                    break;
-                } else {
-                    Console.WriteLine(s);
-                }
+            // clear all comments and trim whitespace
+            line = line.Split('#')[0].Trim();
+
+            // skip any empty lines
+            if (string.IsNullOrEmpty(line)) {
+                continue;
             }
-            Console.WriteLine(++programCounter);
+
+            // process labels
+            if (line.EndsWith(':')) {
+                string label = line.Substring(0, line.Length - 1);
+                
+                continue;
+            }
+
+            Console.WriteLine(line);
+
+            programCounter += 4;
         }
     }
- }
+}
