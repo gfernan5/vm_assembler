@@ -27,8 +27,8 @@ public class Swap : IInstruction {
     }
     public int Encode() {
         int fromEncoded = (_from & 0x0FFF) << 12;
-        int toEncoded = (_to & 0x0FFF)
-        return (0b0001 << 24) | _fromEncoded | toEncoded;
+        int toEncoded = (_to & 0x0FFF);
+        return (0b0001 << 24) | fromEncoded | toEncoded;
     }
 }
 
@@ -42,7 +42,7 @@ public class NOP : IInstruction {
 // Input Instruction
 public class Input : IInstruction {
     public int Encode() {
-        return (0b0100 << 24) | _sbz
+        return (0b0100 << 24);
     }
 }
 
@@ -50,7 +50,7 @@ public class Input : IInstruction {
 public class Stinput : IInstruction {
     private readonly int _unsignedChars;
     public Stinput(int unsignedChars) {
-        if (unsignedChars < 0 || unsignedCharsChars > 0x00FF_FFFF) {
+        if (unsignedChars < 0 || unsignedChars > 0x00FF_FFFF) {
             unsignedChars = 0x00FF_FFFF;
         }
         _unsignedChars = unsignedChars;
