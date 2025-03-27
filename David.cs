@@ -51,3 +51,10 @@ public class Stinput : IInstruction {
         return (0b0101 << 24) | _unsignedChars;
     }
 }
+
+// Dump Instruction
+public class Dump : IInstruction {
+    public int Encode() {
+        return (0b1110 << 28);
+    }
+}

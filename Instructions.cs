@@ -70,3 +70,10 @@ public class Dup : IInstruction {
         return (0b1100 << 28) | _offset;
     }
 }
+
+// Dump Instruction
+public class Dump : IInstruction {
+    public int Encode() {
+        return (0b1110 << 28);
+    }
+}
