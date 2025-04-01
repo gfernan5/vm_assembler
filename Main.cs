@@ -97,6 +97,7 @@ class Assembler
                     }
                 }
                 Console.WriteLine("STPUSH END:\n");
+                continue;
             }
 
             _instructionList.Add(line);
@@ -228,8 +229,8 @@ class Assembler
                 //     break;
                 case "goto":
                     instruction = new Goto(labelMap[inst[1]]);
-                    // Console.WriteLine(instruction.Encode());
-                    // Console.WriteLine(labelMap[inst[1]]);
+                    Console.WriteLine(instruction.Encode());
+                    Console.WriteLine(labelMap[inst[1]]);
                     break;
                 // needs all forms and unary and binary!
                 // case "if":
