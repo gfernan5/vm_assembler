@@ -149,16 +149,16 @@ class Assembler
                     instruction = new Input();
                     break;
                 case "stinput":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int value)) {
-                        instruction = new Stinput(value);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int stinputValue)) {
+                        instruction = new Stinput(stinputValue);
                         break;
                     } else {
                         instruction = new Stinput(0x00FF_FFFF);
                         break;
                     }
                 case "debug":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int value)) {
-                        instruction = new Debug(value);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int debugValue)) {
+                        instruction = new Debug(debugValue);
                         break;
                     } else {
                         instruction = new Debug();
@@ -166,8 +166,8 @@ class Assembler
                     }
                     break;
                 case "pop":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Pop(offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int popOffset)) {
+                        instruction = new Pop(popOffset);
                         break;
                     } else {
                         instruction = new Pop();
@@ -214,8 +214,8 @@ class Assembler
                     instruction = new Not();
                     break;
                 case "stprint":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Stprint(offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int stprintOffset)) {
+                        instruction = new Stprint(stprintOffset);
                         break;
                     } else {
                         instruction = new Stprint();
@@ -247,8 +247,8 @@ class Assembler
                         }
                     }
                 case "print":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Print(0, offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int printOffset)) {
+                        instruction = new Print(0, printOffset);
                         break;
                     } else {
                         instruction = new Print(0, 0);
@@ -256,8 +256,8 @@ class Assembler
                     }
                     break;
                 case "printh":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Print(1, offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int printhOffset)) {
+                        instruction = new Print(1, printhOffset);
                         break;
                     } else {
                         instruction = new Print(1, 0);
@@ -265,8 +265,8 @@ class Assembler
                     }
                     break;
                 case "printo":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Print(3, offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int printoOffset)) {
+                        instruction = new Print(3, printoOffset);
                         break;
                     } else {
                         instruction = new Print(3, 0);
@@ -274,8 +274,8 @@ class Assembler
                     }
                     break;
                 case "printb":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
-                        instruction = new Print(2, offset);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int printbOffset)) {
+                        instruction = new Print(2, printbOffset);
                         break;
                     } else {
                         instruction = new Print(2, 0);
@@ -286,8 +286,8 @@ class Assembler
                     instruction = new Dump();
                     break;
                 case "push":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int value)) {
-                        instruction = new Push(value);
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int pushValue)) {
+                        instruction = new Push(pushValue);
                         break;
                     } else {
                         instruction = new Push();
