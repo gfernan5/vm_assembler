@@ -246,7 +246,7 @@ public class Stprint : IInstruction {
     private readonly int _offset;
 
     public Stprint(int offset = 0) {
-        _offset = offset;
+        _offset = offset & ~3;
     }
 
     public int Encode() {
