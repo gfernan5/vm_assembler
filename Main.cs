@@ -71,6 +71,10 @@ class Assembler
         //     Console.WriteLine(v);
         // }
 
+        foreach (var v in labelMap) {
+            Console.WriteLine($"key: {v.Key}: value: {v.Value}");
+        }
+
         foreach (var s in _instructionList) {
             string[] inst = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string instName = inst[0].ToLower();
@@ -78,8 +82,13 @@ class Assembler
             IInstruction instruction = null;
             switch (instName.ToLower()) {
                 case "exit":
-                    instruction = new Exit();
-                    break;
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int exitCode)) {
+                        instruction = new Exit(exitCode);
+                        break;
+                    } else {
+                        instruction = new Exit();
+                        break;
+                    }
                 case "swap":
                     instruction = new Swap();
                     break;
@@ -151,9 +160,11 @@ class Assembler
                 // case "return":
                 //     instruction = new Return();
                 //     break;
-                // case "goto":
-                //     instruction = new Goto();
-                //     break;
+                case "goto":
+                    instruction = new Goto(labelMap[inst[1]]);
+                    Console.WriteLine(instruction.Encode());
+                    Console.WriteLine(labelMap[inst[1]]);
+                    break;
                 // needs all forms and unary and binary!
                 // case "if":
                 //     instruction = new If();
