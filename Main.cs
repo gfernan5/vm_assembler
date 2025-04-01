@@ -8,6 +8,7 @@
 
 using System;
 using System.IO;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -164,7 +165,6 @@ class Assembler
                         instruction = new Debug();
                         break;
                     }
-                    break;
                 case "pop":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int popOffset)) {
                         instruction = new Pop(popOffset);
@@ -173,7 +173,6 @@ class Assembler
                         instruction = new Pop();
                         break;
                     }
-                    break;
                 case "add":
                     instruction = new Add();
                     break;
@@ -221,7 +220,6 @@ class Assembler
                         instruction = new Stprint();
                         break;
                     }
-                    break;
                 // case "call":
                 //     instruction = new Call();
                 //     break;
@@ -246,6 +244,8 @@ class Assembler
                             dupValue = hexValue;
                         }
                     }
+                    instruction = new Dup(dupValue);
+                    break;
                 case "print":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int printOffset)) {
                         instruction = new Print(0, printOffset);
@@ -254,7 +254,6 @@ class Assembler
                         instruction = new Print(0, 0);
                         break;
                     }
-                    break;
                 case "printh":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int printhOffset)) {
                         instruction = new Print(1, printhOffset);
@@ -263,7 +262,6 @@ class Assembler
                         instruction = new Print(1, 0);
                         break;
                     }
-                    break;
                 case "printo":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int printoOffset)) {
                         instruction = new Print(3, printoOffset);
@@ -272,7 +270,6 @@ class Assembler
                         instruction = new Print(3, 0);
                         break;
                     }
-                    break;
                 case "printb":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int printbOffset)) {
                         instruction = new Print(2, printbOffset);
@@ -281,19 +278,18 @@ class Assembler
                         instruction = new Print(2, 0);
                         break;
                     }
-                    break;
                 case "dump":
                     instruction = new Dump();
                     break;
-                case "push":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int pushValue)) {
-                        instruction = new Push(pushValue);
-                        break;
-                    } else {
-                        instruction = new Push();
-                        break;
-                    }
-                    break;
+                // case "push":
+                //     if (inst.Length == 2 && int.TryParse(inst[1], out int pushValue)) {
+                //         instruction = new Push(pushValue);
+                //         break;
+                //     } else {
+                //         instruction = new Push();
+                //         break;
+                //     }
+                //     break;
                 
             }
 
