@@ -85,19 +85,19 @@ class Assembler
                     if (i + 3 < bytes.Length) {
                         value |= (0x01 << 24);
                         Console.WriteLine($"push 0x{value:X8}");
-                        // increment program counter
+                        programCounter += 4;
                     }
                     else {
                         value |= (0x00 << 24);
                         Console.WriteLine($"push 0x{value:X8}");
-                        // increment program counter
+                        programCounter += 4;
                     }
                 }
                 Console.WriteLine("STPUSH END:\n");
             }
 
             _instructionList.Add(line);
-            Console.WriteLine(line);
+            //Console.WriteLine(line);
 
             // update counters
             programCounter += 4;
@@ -109,9 +109,9 @@ class Assembler
         //     Console.WriteLine(v);
         // }
 
-        foreach (var v in labelMap) {
-            Console.WriteLine($"key: {v.Key}: value: {v.Value}");
-        }
+        // foreach (var v in labelMap) {
+        //     Console.WriteLine($"key: {v.Key}: value: {v.Value}");
+        // }
 
         foreach (var s in _instructionList) {
             string[] inst = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -200,16 +200,26 @@ class Assembler
                 //     break;
                 case "goto":
                     instruction = new Goto(labelMap[inst[1]]);
-                    Console.WriteLine(instruction.Encode());
-                    Console.WriteLine(labelMap[inst[1]]);
+                    // Console.WriteLine(instruction.Encode());
+                    // Console.WriteLine(labelMap[inst[1]]);
                     break;
                 // needs all forms and unary and binary!
                 // case "if":
                 //     instruction = new If();
                 //     break;
-                // case "dup":
-                //     instruction = new Dup();
-                //     break;
+                case "dup":
+                    // decimal
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int stack_offset)) {
+                        instruction = new Dup(stack_offset);
+                        Console.WriteLine(instruction.Encode());
+                        break;
+                    } else {
+                        instruction = new Dup();
+                        break;
+                    }
+                    // hex
+
+                    // default
                 case "print":
                     instruction = new Print();
                     break;

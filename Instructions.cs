@@ -63,7 +63,7 @@ public class Stinput : IInstruction {
 // Dup Instruction
 public class Dup : IInstruction {
     private readonly int _offset;
-    public Dup(int offset) {
+    public Dup(int offset = 0) {
         _offset = offset & ~3;
     }
     public int Encode() {
