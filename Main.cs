@@ -63,7 +63,6 @@ class Assembler
 
             // check / expand stpush - do not add to _instruction list
             if (line.Contains("stpush")) {
-                Console.WriteLine("STPUSH START:\n");
                 // Find the index of the first and last quotes
                 int startIndex = line.IndexOf('"') + 1; 
                 int endIndex = line.LastIndexOf('"');
@@ -72,7 +71,6 @@ class Assembler
                 
                 // 1. turn input into binary string
                 byte[] bytes = Encoding.ASCII.GetBytes(input);
-                Console.WriteLine(bytes.Length);
                 // 2. Process the string in chunks of 3 characters
                 for (int i = 0; i < bytes.Length; i += 3) {
                     int value = 0;
@@ -98,7 +96,6 @@ class Assembler
                         programCounter += 4;
                     }
                 }
-                Console.WriteLine("STPUSH END:\n");
                 continue;
             }
             else {
