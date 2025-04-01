@@ -120,7 +120,7 @@ class Assembler
             string instName = inst[0].ToLower();
 
             IInstruction instruction = null;
-            switch (instName.ToLower()) {
+            switch (instName) {
                 case "exit":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int exitCode)) {
                         instruction = new Exit(exitCode);
@@ -147,10 +147,22 @@ class Assembler
                         break;
                     }
                 case "debug":
-                    instruction = new Debug();
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int value)) {
+                        instruction = new Debug(value);
+                        break;
+                    } else {
+                        instruction = new Debug();
+                        break;
+                    }
                     break;
                 case "pop":
-                    instruction = new Pop();
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Pop(offset);
+                        break;
+                    } else {
+                        instruction = new Pop();
+                        break;
+                    }
                     break;
                 case "add":
                     instruction = new Add();
@@ -192,7 +204,13 @@ class Assembler
                     instruction = new Not();
                     break;
                 case "stprint":
-                    instruction = new Stprint();
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Stprint(offset);
+                        break;
+                    } else {
+                        instruction = new Stprint();
+                        break;
+                    }
                     break;
                 // case "call":
                 //     instruction = new Call();
@@ -223,14 +241,54 @@ class Assembler
 
                     // default
                 case "print":
-                    instruction = new Print();
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Print(0, offset);
+                        break;
+                    } else {
+                        instruction = new Print(0, 0);
+                        break;
+                    }
+                    break;
+                case "printh":
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Print(1, offset);
+                        break;
+                    } else {
+                        instruction = new Print(1, 0);
+                        break;
+                    }
+                    break;
+                case "printo":
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Print(3, offset);
+                        break;
+                    } else {
+                        instruction = new Print(3, 0);
+                        break;
+                    }
+                    break;
+                case "printb":
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
+                        instruction = new Print(2, offset);
+                        break;
+                    } else {
+                        instruction = new Print(2, 0);
+                        break;
+                    }
                     break;
                 case "dump":
                     instruction = new Dump();
                     break;
-                // case "push":
-                //     instruction = new Push();
-                //     break;
+                case "push":
+                    if (inst.Length == 2 && int.TryParse(inst[1], out int value)) {
+                        instruction = new Push(value);
+                        break;
+                    } else {
+                        instruction = new Push();
+                        break;
+                    }
+                    break;
+                
             }
 
             if (instruction != null) {
