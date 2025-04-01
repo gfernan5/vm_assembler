@@ -10,7 +10,7 @@
 public class Exit : IInstruction {
     private readonly int _exitCode;
     public Exit(int exitCode = 0) {
-        _exitCode = exitCode & 0x00FF_FFFF;
+        _exitCode = exitCode & 0x0000_00FF;
     }
     public int Encode() {
         return (0b0000 << 24) | _exitCode;
