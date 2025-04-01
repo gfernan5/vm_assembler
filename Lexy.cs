@@ -12,6 +12,7 @@ public class Goto : IInstruction {
 
 // Call
 // Extract PC, clear out bottom bits, place into offset of instruction
+// Needs a default!
 public class Call : IInstruction {
     private readonly int _label;
     public Call(int label) {
