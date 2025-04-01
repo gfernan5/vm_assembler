@@ -131,6 +131,8 @@ class Assembler
         //     Console.WriteLine($"key: {v.Key}: value: {v.Value}");
         // }
 
+        programCounter = 0;
+
         foreach (var s in _instructionList) {
             string[] inst = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string instName = inst[0].ToLower();
@@ -140,9 +142,11 @@ class Assembler
                 case "exit":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int exitCode)) {
                         instruction = new Exit(exitCode);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Exit();
+                        programCounter += 4;
                         break;
                     }
                 case "swap":
@@ -150,19 +154,24 @@ class Assembler
                         int.TryParse(inst[1], out int from);
                         if (inst.Length == 3 && int.TryParse(inst[2], out int to)) {
                             instruction = new Swap(from, to);
+                            programCounter += 4;
                             break;
                         }
                         instruction = new Swap(from);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Swap();
+                        programCounter += 4;
                         break;
                     }
                 case "nop":
                     instruction = new Nop();
+                    programCounter += 4;
                     break;
                 case "input":
                     instruction = new Input();
+                    programCounter += 4;
                     break;
                 case "stinput":
                     if (inst.Length == 2) {
@@ -173,9 +182,11 @@ class Assembler
                             stinputValue = stiHexValue;
                         }
                         instruction = new Stinput(stinputValue);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Stinput(0x00FF_FFFF);
+                        programCounter += 4;
                         break;
                     }
                 case "debug":
@@ -187,57 +198,74 @@ class Assembler
                             debugValue = hexValue;
                         }
                         instruction = new Debug(debugValue);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Debug();
+                        programCounter += 4;
                         break;
                     }
                 case "pop":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int popOffset)) {
                         instruction = new Pop(popOffset);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Pop();
+                        programCounter += 4;
                         break;
                     }
                 case "add":
                     instruction = new Add();
+                    programCounter += 4;
                     break;
                 case "sub":
                     instruction = new Sub();
+                    programCounter += 4;
                     break;
                 case "mul":
                     instruction = new Mul();
+                    programCounter += 4;
                     break;
                 case "div":
                     instruction = new Div();
+                    programCounter += 4;
                     break;
                 case "rem":
                     instruction = new Rem();
+                    programCounter += 4;
                     break;
                 case "and":
                     instruction = new And();
+                    programCounter += 4;
                     break;
                 case "or":
                     instruction = new Or();
+                    programCounter += 4;
                     break;
                 case "xor":
                     instruction = new Xor();
+                    programCounter += 4;
                     break;
                 case "lsl":
                     instruction = new Lsl();
+                    programCounter += 4;
                     break;
                 case "lsr":
                     instruction = new Lsr();
+                    programCounter += 4;
                     break;
                 case "asr":
                     instruction = new Asr();
+                    programCounter += 4;
                     break;
                 case "neg":
                     instruction = new Neg();
+                    programCounter += 4;
                     break;
                 case "not":
                     instruction = new Not();
+                    programCounter += 4;
                     break;
                 case "stprint":
                     int stprintValue = 0;
@@ -248,9 +276,11 @@ class Assembler
                             stprintValue = stpHexValue;
                         }
                         instruction = new Stprint(stprintValue);
+                        programCounter += 4;
                         break;
                     } else {
                         instruction = new Stprint();
+                        programCounter += 4;
                         break;
                     }
                 case "call":
@@ -266,6 +296,7 @@ class Assembler
                     instruction = new Goto(labelMap[inst[1]]);
                     Console.WriteLine(instruction.Encode());
                     Console.WriteLine(labelMap[inst[1]]);
+                    programCounter += 4;
                     break;
                 case "ifez":
                     if (inst.Length == 2) {
@@ -273,6 +304,7 @@ class Assembler
                     } else {
                         instruction = new UnaryIf(0, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifnz":
                     if (inst.Length == 2) {
@@ -280,6 +312,7 @@ class Assembler
                     } else {
                         instruction = new UnaryIf(1, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifmi":
                     if (inst.Length == 2) {
@@ -287,12 +320,15 @@ class Assembler
                     } else {
                         instruction = new UnaryIf(2, 0);
                     }
+                    programCounter += 4;
+                    break;
                 case "ifpl":
                     if (inst.Length == 2) {
                         instruction = new UnaryIf(3, labelMap[inst[1]]);
                     } else {
                         instruction = new UnaryIf(3, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifeq":
                     if(inst.Length == 2) {
@@ -301,6 +337,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b000, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifne":
                     if(inst.Length == 2) {
@@ -309,6 +346,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b001, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "iflt":
                     if(inst.Length == 2) {
@@ -317,6 +355,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b010, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifgt":
                     if(inst.Length == 2) {
@@ -325,6 +364,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b011, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifle":
                     if(inst.Length == 2) {
@@ -333,6 +373,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b100, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "ifge":
                     if(inst.Length == 2) {
@@ -341,6 +382,7 @@ class Assembler
                     else {
                         instruction = new BinaryIf(0b101, 0);
                     }
+                    programCounter += 4;
                     break;
                 case "dup":
                     int dupValue = 0;
@@ -352,6 +394,7 @@ class Assembler
                         }
                     }
                     instruction = new Dup(dupValue);
+                    programCounter += 4;
                     break;
                 case "print":
                     int printValue = 0;
@@ -363,6 +406,7 @@ class Assembler
                         }
                     }
                     instruction = new Print(0, printValue);
+                    programCounter += 4;
                     break;
                 case "printh":
                     int printhValue = 0;
@@ -374,6 +418,7 @@ class Assembler
                         }
                     }
                     instruction = new Print(1, printhValue);
+                    programCounter += 4;
                     break;
                 case "printo":
                     int printoValue = 0;
@@ -385,6 +430,7 @@ class Assembler
                         }
                     }
                     instruction = new Print(3, printoValue);
+                    programCounter += 4;
                     break;
                 case "printb":
                     int printbValue = 0;
@@ -396,9 +442,11 @@ class Assembler
                         }
                     }
                     instruction = new Print(2, printbValue);
+                    programCounter += 4;
                     break;
                 case "dump":
                     instruction = new Dump();
+                    programCounter += 4;
                     break;
                 case "push":
                     int pushValue = 0;
@@ -409,10 +457,12 @@ class Assembler
                             pushValue = pushHexValue;
                         } else {
                             instruction = new Push(labelMap[inst[1]]);
+                            programCounter += 4;
                             break;
                         }
                     }
                     instruction = new Push(pushValue);
+                    programCounter += 4;
                     break;
             }
 
