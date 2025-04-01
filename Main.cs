@@ -154,7 +154,13 @@ class Assembler
                     instruction = new Input();
                     break;
                 case "stinput":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int stinputValue)) {
+                    if (inst.Length == 2) {
+                        int stinputValue = 0;
+                        if (int.TryParse(inst[1], out int stiDecValue)) {
+                            stinputValue = stiDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int stiHexValue)) {
+                            stinputValue = stiHexValue;
+                        }
                         instruction = new Stinput(stinputValue);
                         break;
                     } else {
