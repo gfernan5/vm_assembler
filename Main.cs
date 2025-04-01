@@ -264,10 +264,54 @@ class Assembler
                     Console.WriteLine(instruction.Encode());
                     Console.WriteLine(labelMap[inst[1]]);
                     break;
-                // needs all forms and unary and binary!
-                // case "if":
-                //     instruction = new If();
-                //     break;
+                case "ifeq":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b000, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b000, 0);
+                    }
+                    break;
+                case "ifne":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b001, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b001, 0);
+                    }
+                    break;
+                case "iflt":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b010, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b010, 0);
+                    }
+                    break;
+                case "ifgt":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b011, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b011, 0);
+                    }
+                    break;
+                case "ifle":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b100, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b100, 0);
+                    }
+                    break;
+                case "ifge":
+                    if(inst.Length == 2) {
+                        instruction = new BinaryIf(0b101, labelMap[inst[1]]);
+                    }
+                    else {
+                        instruction = new BinaryIf(0b101, 0);
+                    }
+                    break;
                 case "dup":
                     int dupValue = 0;
                     if (inst.Length == 2) {
