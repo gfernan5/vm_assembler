@@ -87,20 +87,23 @@ class Assembler
                     // 5. If there are more bytes after, add continuation byte. else, stop
                     if (i + 3 < bytes.Length) {
                         value |= (0x01 << 24);
-                        Console.WriteLine($"push 0x{value:X8}");
+                        string new_value = $"push 0x{value:X8}";
+                        instructionList.Add(new_value);
                         programCounter += 4;
                     }
                     else {
                         value |= (0x00 << 24);
-                        Console.WriteLine($"push 0x{value:X8}");
+                        string new_value = $"push 0x{value:X8}";
+                        instructionList.Add(new_value);
                         programCounter += 4;
                     }
                 }
                 Console.WriteLine("STPUSH END:\n");
                 continue;
             }
-
-            _instructionList.Add(line);
+            else {
+                instructionList.Add(line);
+            }
             //Console.WriteLine(line);
 
             // update counters
