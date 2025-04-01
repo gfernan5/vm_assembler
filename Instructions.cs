@@ -296,11 +296,11 @@ public class Goto : IInstruction {
 // Extract PC, clear out bottom bits, place into offset of instruction
 public class Call : IInstruction {
     private readonly int _label;
-    public Call(int label) {
-        _label = label & ~3;
+    public Call(int programCounter, int label) {
+        _label = (label - programCounter) & ~3;
     }
     public int Encode() {
-        return (0b0101 << 28) | _label;
+        return (0b0101 << 28) | (_label & 0x0FFFFFFF);
     }
 }
 

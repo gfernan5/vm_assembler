@@ -253,9 +253,12 @@ class Assembler
                         instruction = new Stprint();
                         break;
                     }
-                // case "call":
-                //     instruction = new Call();
-                //     break;
+                case "call":
+                    Console.WriteLine(programCounter);
+                    Console.WriteLine(labelMap[inst[1]]);
+                    instruction = new Call(programCounter, labelMap[inst[1]]);
+                    programCounter += 4;
+                    break;
                 // case "return":
                 //     instruction = new Return();
                 //     break;
