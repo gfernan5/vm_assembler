@@ -42,6 +42,7 @@ class Assembler
         }
 
         // read file line by line
+
         string line;
         while ((line = sr.ReadLine()) != null) {
             // clear all comments and trim whitespace
@@ -61,6 +62,7 @@ class Assembler
                 continue;
             }
 
+            Stack<string> stack = new Stack<string>();
             // check / expand stpush - do not add to _instruction list
             if (line.Contains("stpush")) {
                 // Find the index of the first and last quotes
@@ -71,6 +73,7 @@ class Assembler
                 
                 // 1. turn input into binary string
                 byte[] bytes = Encoding.ASCII.GetBytes(input);
+                Console.WriteLine($"Input: {BitConverter.ToString(bytes)}");
                 // 2. Process the string in chunks of 3 characters
                 for (int i = 0; i < bytes.Length; i += 3) {
                     int value = 0;
@@ -79,22 +82,33 @@ class Assembler
                     if (3 < bytes.Length - i) { remaining = 3; }
                     else { remaining = bytes.Length - i; }
                     // 4. Pack bytes into value
-                    for (int j = 0; j < remaining; j++) {
+                    for (int j = remaining - 1; j >= 0; j--) {
                         value |= (bytes[i + j] << (16 - (j * 8)));
                     }
                     // 5. If there are more bytes after, add continuation byte. else, stop
                     if (i + 3 < bytes.Length) {
-                        value |= (0x01 << 24);
-                        string new_value = $"push 0x{value:X8}";
-                        _instructionList.Add(new_value);
+                        value = (value << 8) | (0x01);
+
+                        byte[] bytes2 = BitConverter.GetBytes(value);
+                        string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
+                        string final_v = "push " + "0x" + push_value;
+                        Console.WriteLine($"{final_v}");
+                        stack.Push(final_v);
                         programCounter += 4;
                     }
                     else {
-                        value |= (0x00 << 24);
-                        string new_value = $"push 0x{value:X8}";
-                        _instructionList.Add(new_value);
+                        value = (value << 8) | (0x00);
+                        byte[] bytes2 = BitConverter.GetBytes(value);
+                        string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
+                        string final_v = "push " + "0x" + push_value;
+                        Console.WriteLine($"{final_v}");
+                        stack.Push(final_v);
                         programCounter += 4;
                     }
+                }
+                // pop off the stack
+                while (stack.Count != 0) {
+                    _instructionList.Add(stack.Pop());
                 }
                 continue;
             }
