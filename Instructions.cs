@@ -345,3 +345,16 @@ public class BinaryIf : IInstruction {
         return (0b1000 << 28) | (_cond << 25) | _label;
     }
 }
+
+// Push - Opcode 15
+public class Push : IInstruction {
+    private readonly int _value;
+
+    public Push(int value = 0) {
+        _value = value;
+    }
+
+    public int Encode() {
+        return (0b1111 << 28) | (_value & 0x0FFFFFFF);
+    }
+}

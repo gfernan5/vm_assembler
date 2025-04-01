@@ -165,7 +165,13 @@ class Assembler
                         break;
                     }
                 case "debug":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int debugValue)) {
+                    if (inst.Length == 2) {
+                        int debugValue = 0;
+                        if (int.TryParse(inst[1], out int decValue)) {
+                            debugValue = decValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexValue)) {
+                            debugValue = hexValue;
+                        }
                         instruction = new Debug(debugValue);
                         break;
                     } else {
