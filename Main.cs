@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 class Assembler
 {
@@ -58,8 +59,43 @@ class Assembler
                 continue;
             }
 
+            // check / expand stpush - do not add to _instruction list
+            if (line.Contains("stpush")) {
+                Console.WriteLine("STPUSH START:\n");
+                // Find the index of the first and last quotes
+                int startIndex = line.IndexOf('"') + 1; 
+                int endIndex = line.LastIndexOf('"');
+                // grab substring of this value
+                string input = line.Substring(startIndex, endIndex - startIndex);
+                
+                // 1. turn input into binary string
+                byte[] bytes = Encoding.ASCII.GetBytes(input);
+                // 2. Process the string in chunks of 3 characters
+                for (int i = 0; i < bytes.Length; i += 3) {
+                    int value = 0;
+                    // 3. grab the appropriate number of bytes for binary (3 or less)
+                    int remaining;
+                    if (3 < bytes.Length - i) { remaining = 3; }
+                    else { remaining = bytes.Length - i; }
+                    // 4. Pack bytes into value
+                    for (int j = 0; j < remaining; j++) {
+                        value |= (bytes[i + j] << (16 - (j * 8)));
+                    }
+                    // 5. If there are more bytes after, add continuation byte. else, stop
+                    if (i + 3 < bytes.Length) {
+                        value |= (0x01 << 24);
+                        Console.WriteLine($"push 0x{value:X8}");
+                    }
+                    else {
+                        value |= (0x00 << 24);
+                        Console.WriteLine($"push 0x{value:X8}");
+                    }
+                }
+                Console.WriteLine("STPUSH END:\n");
+            }
+
             _instructionList.Add(line);
-            //Console.WriteLine(line);
+            Console.WriteLine(line);
 
             // update counters
             programCounter += 4;
