@@ -238,18 +238,14 @@ class Assembler
                 //     instruction = new If();
                 //     break;
                 case "dup":
-                    // decimal
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int stack_offset)) {
-                        instruction = new Dup(stack_offset);
-                        Console.WriteLine(instruction.Encode());
-                        break;
-                    } else {
-                        instruction = new Dup();
-                        break;
+                    int dupValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int decValue)) {
+                            dupValue = decValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexValue)) {
+                            dupValue = hexValue;
+                        }
                     }
-                    // hex
-
-                    // default
                 case "print":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int offset)) {
                         instruction = new Print(0, offset);
