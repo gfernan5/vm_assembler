@@ -88,13 +88,13 @@ class Assembler
                     if (i + 3 < bytes.Length) {
                         value |= (0x01 << 24);
                         string new_value = $"push 0x{value:X8}";
-                        instructionList.Add(new_value);
+                        _instructionList.Add(new_value);
                         programCounter += 4;
                     }
                     else {
                         value |= (0x00 << 24);
                         string new_value = $"push 0x{value:X8}";
-                        instructionList.Add(new_value);
+                        _instructionList.Add(new_value);
                         programCounter += 4;
                     }
                 }
@@ -102,7 +102,7 @@ class Assembler
                 continue;
             }
             else {
-                instructionList.Add(line);
+                _instructionList.Add(line);
             }
             //Console.WriteLine(line);
 
