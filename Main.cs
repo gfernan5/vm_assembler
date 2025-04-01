@@ -257,59 +257,75 @@ class Assembler
                 case "dup":
                     int dupValue = 0;
                     if (inst.Length == 2) {
-                        if (int.TryParse(inst[1], out int decValue)) {
-                            dupValue = decValue;
-                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexValue)) {
-                            dupValue = hexValue;
+                        if (int.TryParse(inst[1], out int dupDecValue)) {
+                            dupValue = dupDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int dupHexValue)) {
+                            dupValue = dupHexValue;
                         }
                     }
                     instruction = new Dup(dupValue);
                     break;
                 case "print":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int printOffset)) {
-                        instruction = new Print(0, printOffset);
-                        break;
-                    } else {
-                        instruction = new Print(0, 0);
-                        break;
+                    int printValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int printDecValue)) {
+                            printValue = printDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int printHexValue)) {
+                            printValue = printHexValue;
+                        }
                     }
+                    instruction = new Print(0, printValue);
+                    break;
                 case "printh":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int printhOffset)) {
-                        instruction = new Print(1, printhOffset);
-                        break;
-                    } else {
-                        instruction = new Print(1, 0);
-                        break;
+                    int printhValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int printhDecValue)) {
+                            printhValue = printhDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int printhHexValue)) {
+                            printhValue = printhHexValue;
+                        }
                     }
+                    instruction = new Print(1, printhValue);
+                    break;
                 case "printo":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int printoOffset)) {
-                        instruction = new Print(3, printoOffset);
-                        break;
-                    } else {
-                        instruction = new Print(3, 0);
-                        break;
+                    int printoValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int printoDecValue)) {
+                            printoValue = printoDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int printoHexValue)) {
+                            printoValue = printoHexValue;
+                        }
                     }
+                    instruction = new Print(3, printoValue);
+                    break;
                 case "printb":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int printbOffset)) {
-                        instruction = new Print(2, printbOffset);
-                        break;
-                    } else {
-                        instruction = new Print(2, 0);
-                        break;
+                    int printbValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int printbDecValue)) {
+                            printbValue = printbDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int printbHexValue)) {
+                            printbValue = printbHexValue;
+                        }
                     }
+                    instruction = new Print(2, printbValue);
+                    break;
                 case "dump":
                     instruction = new Dump();
                     break;
-                // case "push":
-                //     if (inst.Length == 2 && int.TryParse(inst[1], out int pushValue)) {
-                //         instruction = new Push(pushValue);
-                //         break;
-                //     } else {
-                //         instruction = new Push();
-                //         break;
-                //     }
-                //     break;
-                
+                case "push":
+                    int pushValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int pushDecValue)) {
+                            pushValue = pushDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int pushHexValue)) {
+                            pushValue = pushHexValue;
+                        } else {
+                            instruction = new Push(labelMap[inst[1]]);
+                            break;
+                        }
+                    }
+                    instruction = new Push(pushValue);
+                    break;
             }
 
             if (instruction != null) {
