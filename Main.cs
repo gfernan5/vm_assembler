@@ -85,10 +85,12 @@ class Assembler
                     if (i + 3 < bytes.Length) {
                         value |= (0x01 << 24);
                         Console.WriteLine($"push 0x{value:X8}");
+                        // increment program counter
                     }
                     else {
                         value |= (0x00 << 24);
                         Console.WriteLine($"push 0x{value:X8}");
+                        // increment program counter
                     }
                 }
                 Console.WriteLine("STPUSH END:\n");
