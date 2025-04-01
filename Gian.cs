@@ -15,7 +15,7 @@ public class Debug : IInstruction {
 public class Pop : IInstruction {
     private readonly int _offset;
 
-    public Pop(uint offset = 4) {
+    public Pop(int offset = 4) {
         _offset = offset >> 2;
     }
 
@@ -48,5 +48,31 @@ public class Stprint : IInstruction {
 
     public int Encode() {
         return (0b0100 << 28) | (_offset & 0x0FFFFFFF);
+    }
+}
+
+// Print - Opcode 13
+public class Print : IInstruction {
+    private readonly int _fmt;
+    private readonly int _offset;
+
+    public Print(int fmt = 0, int offset = 0) {
+        _offset = offset & 0x0FFFFFFC;
+        if(fmt == 1) {
+            _fmt = 0b0001;
+        }
+        else if(fmt == 2) {
+            _fmt = 0b0010;
+        }
+        else if(fmt == 3) {
+            _fmt = 0b0011;
+        }
+        else {
+            _fmt = 0b0000;
+        }
+    }
+
+    public int Encode() {
+        return (0b1101 << 28) | _offset | _fmt;
     }
 }
