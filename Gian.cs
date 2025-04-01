@@ -15,7 +15,7 @@ public class Debug : IInstruction {
 public class Pop : IInstruction {
     private readonly int _offset;
 
-    public Pop(uint offset = 4) {
+    public Pop(int offset = 4) {
         _offset = offset >> 2;
     }
 
