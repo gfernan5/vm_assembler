@@ -76,3 +76,16 @@ public class Print : IInstruction {
         return (0b1101 << 28) | _offset | _fmt;
     }
 }
+
+// Push - Opcode 15
+public class Push : IInstruction {
+    private readonly int _value;
+
+    public Push(int value = 0) {
+        _value = value;
+    }
+
+    public int Encode() {
+        return (0b1111 << 28) | (_value & 0x0FFFFFFF);
+    }
+}
