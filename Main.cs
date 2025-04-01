@@ -220,8 +220,14 @@ class Assembler
                     instruction = new Not();
                     break;
                 case "stprint":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int stprintOffset)) {
-                        instruction = new Stprint(stprintOffset);
+                    int stprintValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int stpDecValue)) {
+                            stprintValue = stpDecValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int stpHexValue)) {
+                            stprintValue = stpHexValue;
+                        }
+                        instruction = new Stprint(stprintValue);
                         break;
                     } else {
                         instruction = new Stprint();
