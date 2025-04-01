@@ -289,9 +289,13 @@ class Assembler
                     instruction = new Call(programCounter, labelMap[inst[1]]);
                     programCounter += 4;
                     break;
-                // case "return":
-                //     instruction = new Return();
-                //     break;
+                case "return":
+                    if(inst.Length == 2) {
+                        instruction = new Return(int.Parse(inst[1]));
+                    } else {
+                        instruction = new Return();
+                    }
+                    break;
                 case "goto":
                     instruction = new Goto(labelMap[inst[1]]);
                     Console.WriteLine(instruction.Encode());
