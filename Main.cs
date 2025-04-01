@@ -9,6 +9,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Text;
 
 class Assembler
@@ -66,10 +67,11 @@ class Assembler
                 int startIndex = line.IndexOf('"') + 1; 
                 int endIndex = line.LastIndexOf('"');
                 // grab substring of this value
-                string input = line.Substring(startIndex, endIndex - startIndex);
+                string input = Regex.Unescape(line.Substring(startIndex, endIndex - startIndex));
                 
                 // 1. turn input into binary string
                 byte[] bytes = Encoding.ASCII.GetBytes(input);
+                Console.WriteLine(bytes.Length);
                 // 2. Process the string in chunks of 3 characters
                 for (int i = 0; i < bytes.Length; i += 3) {
                     int value = 0;
