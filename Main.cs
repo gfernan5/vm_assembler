@@ -130,8 +130,18 @@ class Assembler
                         break;
                     }
                 case "swap":
-                    instruction = new Swap();
-                    break;
+                    if (inst.Length >= 2) {
+                        int.TryParse(inst[1], out int from);
+                        if (inst.Length == 3 && int.TryParse(inst[2], out int to)) {
+                            instruction = new Swap(from, to);
+                            break;
+                        }
+                        instruction = new Swap(from);
+                        break;
+                    } else {
+                        instruction = new Swap();
+                        break;
+                    }
                 case "nop":
                     instruction = new Nop();
                     break;
