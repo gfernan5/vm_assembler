@@ -270,23 +270,30 @@ class Assembler
                 case "ifez":
                     if (inst.Length == 2) {
                         instruction = new UnaryIf(0, labelMap[inst[1]]);
-                        break;
+                    } else {
+                        instruction = new UnaryIf(0, 0);
                     }
+                    break;
                 case "ifnz":
                     if (inst.Length == 2) {
                         instruction = new UnaryIf(1, labelMap[inst[1]]);
-                        break;
+                    } else {
+                        instruction = new UnaryIf(1, 0);
                     }
+                    break;
                 case "ifmi":
                     if (inst.Length == 2) {
                         instruction = new UnaryIf(2, labelMap[inst[1]]);
-                        break;
+                    } else {
+                        instruction = new UnaryIf(2, 0);
                     }
                 case "ifpl":
                     if (inst.Length == 2) {
                         instruction = new UnaryIf(3, labelMap[inst[1]]);
-                        break;
+                    } else {
+                        instruction = new UnaryIf(3, 0);
                     }
+                    break;
                 case "ifeq":
                     if(inst.Length == 2) {
                         instruction = new BinaryIf(0b000, labelMap[inst[1]]);
