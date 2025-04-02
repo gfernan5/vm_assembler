@@ -128,6 +128,13 @@ class Assembler
         //     Console.WriteLine($"key: {v.Key}: value: {v.Value}");
         // }
 
+        int rem = _instructionList.Count % 4;
+        if (rem != 0) {
+            for (int i = 0; i < (4 - rem); i++) {
+                _instructionList.Add("nop");
+            }
+        }
+
         programCounter = 0;
         
         foreach (var s in _instructionList) {
@@ -203,8 +210,14 @@ class Assembler
                         break;
                     }
                 case "pop":
-                    if (inst.Length == 2 && int.TryParse(inst[1], out int popOffset)) {
-                        instruction = new Pop(popOffset);
+                    int popValue = 0;
+                    if (inst.Length == 2) {
+                        if (int.TryParse(inst[1], out int decPopValue)) {
+                            popValue = decPopValue;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int hexPopValue)) {
+                            popValue = hexPopValue;
+                        }
+                        instruction = new Pop(popValue);
                         programCounter += 4;
                         break;
                     } else {
