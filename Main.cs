@@ -290,11 +290,18 @@ class Assembler
                     programCounter += 4;
                     break;
                 case "return":
-                    if(inst.Length == 2) {
-                        instruction = new Return(int.Parse(inst[1]));
+                    if (inst.Length == 2) {
+                        int returnValue = 0;
+                        if (int.TryParse(inst[1], out int retVal)) {
+                            returnValue = retVal;
+                        } else if (inst[1].StartsWith("0x") && int.TryParse(inst[1].Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int rethexValue)) {
+                            returnValue = rethexValue;
+                        }
+                        instruction = new Return(returnValue);
                     } else {
-                        instruction = new Return();
+                        instruction = new Return();   
                     }
+                    programCounter += 4;
                     break;
                 case "goto":
                     instruction = new Goto(labelMap[inst[1]]);

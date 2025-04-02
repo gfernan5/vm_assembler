@@ -308,7 +308,7 @@ public class Call : IInstruction {
 // takes an offset, zeros out bottom bits, places it into the stack offset
 public class Return : IInstruction {
     private readonly int _label;
-    public Return(int label) {
+    public Return(int label = 0) {
         _label = label & ~3;
     }
     public int Encode() {
