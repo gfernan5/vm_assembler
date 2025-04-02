@@ -47,8 +47,11 @@ class Assembler
         while ((line = sr.ReadLine()) != null) {
             // clear all comments and trim whitespace
             line = line.Split('#')[0].Trim();
-            string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            line = string.Join(" ", parts);
+
+            if (!line.TrimStart().StartsWith("stpush")) {
+                string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                line = string.Join(" ", parts);
+            }
 
             // skip any empty lines
             if (string.IsNullOrEmpty(line)) {
