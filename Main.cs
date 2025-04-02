@@ -79,8 +79,12 @@ class Assembler
                     int value = 0;
                     // 3. grab the appropriate number of bytes for binary (3 or less)
                     int remaining;
-                    if (3 < bytes.Length - i) { remaining = 3; }
-                    else { remaining = bytes.Length - i; }
+                    if (3 < bytes.Length - i) { 
+                        remaining = 3; 
+                    }
+                    else { 
+                        remaining = bytes.Length - i; 
+                    }
                     // 4. Pack bytes into value
                     for (int j = remaining - 1; j >= 0; j--) {
                         value |= (bytes[i + j] << (16 - (j * 8)));
