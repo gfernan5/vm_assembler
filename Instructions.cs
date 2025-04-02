@@ -219,7 +219,7 @@ public class Pop : IInstruction {
     private readonly int _offset;
 
     public Pop(int offset = 4) {
-        _offset = offset & 0x0FFF_FFFC;
+        _offset = offset & 0x0FFFFFFC;
     }
 
     public int Encode() {
@@ -250,7 +250,7 @@ public class Stprint : IInstruction {
     }
 
     public int Encode() {
-        return (0b0100 << 28) | (_offset & 0x0FFFFFFF);
+        return (0b0100 << 28) | (_offset & 0x0FFFFFFC);
     }
 }
 
@@ -288,7 +288,7 @@ public class Goto : IInstruction {
         _label = label & ~3;
     }
     public int Encode() {
-        return (0b0111 << 28) | (_label & 0x0FFF_FFFF);
+        return (0b0111 << 28) | (_label & 0x0FFF_FFFC);
     }
 }
 
@@ -300,7 +300,7 @@ public class Call : IInstruction {
         _label = (label - programCounter) & ~3;
     }
     public int Encode() {
-        return (0b0101 << 28) | (_label & 0x0FFFFFFF);
+        return (0b0101 << 28) | (_label & 0x0FFFFFFC);
     }
 }
 
@@ -312,7 +312,7 @@ public class Return : IInstruction {
         _label = label & ~3;
     }
     public int Encode() {
-        return (0b0110 << 28) | _label;
+        return (0b0110 << 28) | (_label & 0x0FFFFFFC);
     }
 }
 
@@ -327,7 +327,7 @@ public class UnaryIf : IInstruction {
         _label = label;
     }
     public int Encode() {
-        return (0b1001 << 28) | (0b0 << 27) | (_cond << 25) | (_label & 0x01FFFFFF);
+        return (0b1001 << 28) | (0b0 << 27) | (_cond << 25) | (_label & 0x1FFFFFC);
     }
 }
 
@@ -342,7 +342,7 @@ public class BinaryIf : IInstruction {
         _label = label;
     }
     public int Encode() {
-        return (0b1000 << 28) | (_cond << 25) | (_label & 0x01FFFFFF);
+        return (0b1000 << 28) | (_cond << 25) | (_label & 0x1FFFFFC);
     }
 }
 

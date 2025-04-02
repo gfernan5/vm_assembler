@@ -129,7 +129,7 @@ class Assembler
         // }
 
         programCounter = 0;
-
+        
         foreach (var s in _instructionList) {
             string[] inst = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string instName = inst[0].ToLower();
@@ -308,33 +308,33 @@ class Assembler
                     break;
                 case "ifez":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(0, labelMap[inst[1]] - programCounter);
+                        instruction = new UnaryIf(0b00, labelMap[inst[1]] - programCounter);
                     } else {
-                        instruction = new UnaryIf(0, 0);
+                        instruction = new UnaryIf(0b00, 0);
                     }
                     programCounter += 4;
                     break;
                 case "ifnz":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(1, labelMap[inst[1]] - programCounter);
+                        instruction = new UnaryIf(0b01, labelMap[inst[1]] - programCounter);
                     } else {
-                        instruction = new UnaryIf(1, 0);
+                        instruction = new UnaryIf(0b01, 0);
                     }
                     programCounter += 4;
                     break;
                 case "ifmi":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(2, labelMap[inst[1]] - programCounter);
+                        instruction = new UnaryIf(0b10, labelMap[inst[1]] - programCounter);
                     } else {
-                        instruction = new UnaryIf(2, 0);
+                        instruction = new UnaryIf(0b10, 0);
                     }
                     programCounter += 4;
                     break;
                 case "ifpl":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(3, labelMap[inst[1]] - programCounter);
+                        instruction = new UnaryIf(0b11, labelMap[inst[1]] - programCounter);
                     } else {
-                        instruction = new UnaryIf(3, 0);
+                        instruction = new UnaryIf(0b11, 0);
                     }
                     programCounter += 4;
                     break;
