@@ -301,14 +301,14 @@ class Assembler
                     programCounter += 4;
                     break;
                 case "goto":
-                    instruction = new Goto(labelMap[inst[1]]);
+                    instruction = new Goto(labelMap[inst[1]] - programCounter);
                     Console.WriteLine(instruction.Encode());
                     Console.WriteLine(labelMap[inst[1]]);
                     programCounter += 4;
                     break;
                 case "ifez":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(0, labelMap[inst[1]]);
+                        instruction = new UnaryIf(0, labelMap[inst[1]] - programCounter);
                     } else {
                         instruction = new UnaryIf(0, 0);
                     }
@@ -316,7 +316,7 @@ class Assembler
                     break;
                 case "ifnz":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(1, labelMap[inst[1]]);
+                        instruction = new UnaryIf(1, labelMap[inst[1]] - programCounter);
                     } else {
                         instruction = new UnaryIf(1, 0);
                     }
@@ -324,7 +324,7 @@ class Assembler
                     break;
                 case "ifmi":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(2, labelMap[inst[1]]);
+                        instruction = new UnaryIf(2, labelMap[inst[1]] - programCounter);
                     } else {
                         instruction = new UnaryIf(2, 0);
                     }
@@ -332,7 +332,7 @@ class Assembler
                     break;
                 case "ifpl":
                     if (inst.Length == 2) {
-                        instruction = new UnaryIf(3, labelMap[inst[1]]);
+                        instruction = new UnaryIf(3, labelMap[inst[1]] - programCounter);
                     } else {
                         instruction = new UnaryIf(3, 0);
                     }
@@ -340,7 +340,7 @@ class Assembler
                     break;
                 case "ifeq":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b000, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b000, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b000, 0);
@@ -349,7 +349,7 @@ class Assembler
                     break;
                 case "ifne":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b001, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b001, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b001, 0);
@@ -358,7 +358,7 @@ class Assembler
                     break;
                 case "iflt":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b010, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b010, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b010, 0);
@@ -367,7 +367,7 @@ class Assembler
                     break;
                 case "ifgt":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b011, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b011, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b011, 0);
@@ -376,7 +376,7 @@ class Assembler
                     break;
                 case "ifle":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b100, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b100, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b100, 0);
@@ -385,7 +385,7 @@ class Assembler
                     break;
                 case "ifge":
                     if(inst.Length == 2) {
-                        instruction = new BinaryIf(0b101, labelMap[inst[1]]);
+                        instruction = new BinaryIf(0b101, labelMap[inst[1]] - programCounter);
                     }
                     else {
                         instruction = new BinaryIf(0b101, 0);
