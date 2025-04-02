@@ -219,11 +219,11 @@ public class Pop : IInstruction {
     private readonly int _offset;
 
     public Pop(int offset = 4) {
-        _offset = offset >> 2;
+        _offset = offset & 0x0FFF_FFFC;
     }
 
     public int Encode() {
-        return (0b0001 << 28) | (_offset << 2);
+        return (0b0001 << 28) | _offset;
     }
 }
 
