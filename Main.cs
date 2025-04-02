@@ -94,6 +94,10 @@ class Assembler
                         value = (value << 8) | (0x01);
                     }
                     else {
+                        int bytes_left = bytes.Length - i;
+                        for (int k = 0; k < (3 - bytes_left); k++) {
+                            value |= (0x01 << 8*k);
+                        }
                         value = (value << 8) | (0x00);
                     }
                     byte[] bytes2 = BitConverter.GetBytes(value);
