@@ -3,7 +3,7 @@
  * Authors: David Long, Ethan Miller, Gian Fernandez, Lexy Andershock
  * Date: 2025-04-04
  *
- * Brief: Assembler starting point.
+ * Brief: 2-pass Assembler in C# intended for a virtual machine in Rust.
  */
 
 using System;
@@ -19,9 +19,10 @@ class Assembler
     {
         int programCounter = 0;
         int lineCounter = 0;
+
         Dictionary<string, int> labelMap = new Dictionary<string, int>();
-        List<string> _instructionList = new List<string>();
-        List<IInstruction> instructionList = new List<IInstruction>();
+        List<string> instructionList = new List<string>();
+        List<IInstruction> instructionInterfaces = new List<IInstruction>();
 
         // check CMD line arguments
         if (args.Length != 2) {
@@ -29,10 +30,11 @@ class Assembler
             return;
         }
 
-        // open asm file and set up StreamReader
+        // open asm file and set up a StreamReader
         StreamReader sr;
         string inputFileName = args[0]?.Trim() ?? string.Empty;
 
+        // file error checking
         try {
             sr = new StreamReader(inputFileName);
         }
@@ -41,13 +43,13 @@ class Assembler
             return;
         }
 
-        // read file line by line
-
+        /* PASS 1 */
         string line;
         while ((line = sr.ReadLine()) != null) {
             // clear all comments and trim whitespace
             line = line.Split('#')[0].Trim();
 
+            // skip stpush instructions
             if (!line.TrimStart().StartsWith("stpush")) {
                 string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 line = string.Join(" ", parts);
@@ -65,8 +67,8 @@ class Assembler
                 continue;
             }
 
-            Stack<string> stack = new Stack<string>();
             // check / expand stpush - do not add to _instruction list
+            Stack<string> stack = new Stack<string>();
             if (line.Contains("stpush")) {
                 // Find the index of the first and last quotes
                 int startIndex = line.IndexOf('"') + 1; 
@@ -76,7 +78,6 @@ class Assembler
                 
                 // 1. turn input into binary string
                 byte[] bytes = Encoding.ASCII.GetBytes(input);
-                Console.WriteLine($"Input: {BitConverter.ToString(bytes)}");
                 // 2. Process the string in chunks of 3 characters
                 for (int i = 0; i < bytes.Length; i += 3) {
                     int value = 0;
@@ -97,6 +98,7 @@ class Assembler
                         value = (value << 8) | (0x01);
                     }
                     else {
+                        // 6. process remaining empty characters
                         int bytes_left = bytes.Length - i;
                         for (int k = 0; k < (3 - bytes_left); k++) {
                             value |= (0x01 << 8*k);
@@ -106,60 +108,59 @@ class Assembler
                     byte[] bytes2 = BitConverter.GetBytes(value);
                     string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
                     string final_v = "push " + "0x" + push_value;
-                    Console.WriteLine($"{final_v}");
+
                     stack.Push(final_v);
                     programCounter += 4;
                 }
-                // pop off the stack
+                // pop off the stack and add to _instructionList
                 while (stack.Count != 0) {
-                    _instructionList.Add(stack.Pop());
+                    instructionList.Add(stack.Pop());
                 }
                 continue;
             }
             else {
-                _instructionList.Add(line);
+                instructionList.Add(line);
             }
-            //Console.WriteLine(line);
 
             // update counters
             programCounter += 4;
             lineCounter++;
         }
 
-        // DEBUG: print instructions
-        // foreach (var v in _instructionList) {
-        //     Console.WriteLine(v);
-        // }
+        // error check number of instructions
+        if (instructionList.Count == 0) {
+            Console.WriteLine("error: no instructions to assemble!");
+        }
 
-        // foreach (var v in labelMap) {
-        //     Console.WriteLine($"key: {v.Key}: value: {v.Value}");
-        // }
-
-        int rem = _instructionList.Count % 4;
+        // add nop instructions to pad out to a multiple of 4
+        int rem = instructionList.Count % 4;
         if (rem != 0) {
             for (int i = 0; i < (4 - rem); i++) {
-                _instructionList.Add("nop");
+                instructionList.Add("nop");
             }
         }
 
+        // reset program counter to pass 2
         programCounter = 0;
         
-        foreach (var s in _instructionList) {
+        /* PASS 2 */
+        foreach (var s in instructionList) {
             string[] inst = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string instName = inst[0].ToLower();
 
+            // switch on instruction names
+            // process any instruction arguments
+            // create IInstruction interfaces for each instruction
             IInstruction instruction = null;
             switch (instName) {
                 case "exit":
                     if (inst.Length == 2 && int.TryParse(inst[1], out int exitCode)) {
                         instruction = new Exit(exitCode);
-                        programCounter += 4;
-                        break;
                     } else {
                         instruction = new Exit();
-                        programCounter += 4;
-                        break;
                     }
+                    programCounter += 4;
+                    break;
                 case "swap":
                     if (inst.Length >= 2) {
                         int.TryParse(inst[1], out int from);
@@ -494,28 +495,28 @@ class Assembler
                     break;
             }
 
+            // add IInstruction interfaces to the instructionInterfaces list
             if (instruction != null) {
-                instructionList.Add(instruction);
+                instructionInterfaces.Add(instruction);
             }
         }
 
-        // DEBUG: print interfaces
-        // foreach (var v in instructionList) {
-        //     Console.WriteLine(v);
-        // }
-
+        // create output file stream
         FileStream fs;
         string outputFileName = args[1]?.Trim() ?? string.Empty;
 
+        // create binary writer using the file stream
         fs = new FileStream(outputFileName, FileMode.Create);
         BinaryWriter bWriter = new BinaryWriter(fs);
 
+        // write magic header to v file
         bWriter.Write((byte)0xDE);
         bWriter.Write((byte)0xAD);
         bWriter.Write((byte)0xBE);
         bWriter.Write((byte)0xEF);
 
-        foreach (var inst in instructionList) {
+        // call Encode() on each interface in the instructionInterfaces list
+        foreach (var inst in instructionInterfaces) {
             bWriter.Write(inst.Encode());
         }
     }
