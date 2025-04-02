@@ -64,7 +64,7 @@ public class Stinput : IInstruction {
 public class Dup : IInstruction {
     private readonly int _offset;
     public Dup(int offset = 0) {
-        _offset = offset & ~3;
+        _offset = offset & 0x0FFFFFFC;
     }
     public int Encode() {
         return (0b1100 << 28) | _offset;
@@ -285,10 +285,10 @@ public class Print : IInstruction {
 public class Goto : IInstruction {
     private readonly int _label;
     public Goto(int label) {
-        _label = label;
+        _label = label & ~3;
     }
     public int Encode() {
-        return (0b0111 << 28) | _label;
+        return (0b0111 << 28) | (_label & 0x0FFF_FFFF);
     }
 }
 
@@ -327,7 +327,7 @@ public class UnaryIf : IInstruction {
         _label = label;
     }
     public int Encode() {
-        return (0b1001 << 28) | (0b0 << 27) | (_cond << 25) | _label;
+        return (0b1001 << 28) | (0b0 << 27) | (_cond << 25) | (_label & 0x01FFFFFF);
     }
 }
 
@@ -342,7 +342,7 @@ public class BinaryIf : IInstruction {
         _label = label;
     }
     public int Encode() {
-        return (0b1000 << 28) | (_cond << 25) | _label;
+        return (0b1000 << 28) | (_cond << 25) | (_label & 0x01FFFFFF);
     }
 }
 
