@@ -88,23 +88,16 @@ class Assembler
                     // 5. If there are more bytes after, add continuation byte. else, stop
                     if (i + 3 < bytes.Length) {
                         value = (value << 8) | (0x01);
-
-                        byte[] bytes2 = BitConverter.GetBytes(value);
-                        string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
-                        string final_v = "push " + "0x" + push_value;
-                        Console.WriteLine($"{final_v}");
-                        stack.Push(final_v);
-                        programCounter += 4;
                     }
                     else {
                         value = (value << 8) | (0x00);
-                        byte[] bytes2 = BitConverter.GetBytes(value);
-                        string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
-                        string final_v = "push " + "0x" + push_value;
-                        Console.WriteLine($"{final_v}");
-                        stack.Push(final_v);
-                        programCounter += 4;
                     }
+                    byte[] bytes2 = BitConverter.GetBytes(value);
+                    string push_value = BitConverter.ToString(bytes2).Replace("-", "").ToLower();
+                    string final_v = "push " + "0x" + push_value;
+                    Console.WriteLine($"{final_v}");
+                    stack.Push(final_v);
+                    programCounter += 4;
                 }
                 // pop off the stack
                 while (stack.Count != 0) {
