@@ -302,8 +302,6 @@ class Assembler
                         break;
                     }
                 case "call":
-                    Console.WriteLine(programCounter);
-                    Console.WriteLine(labelMap[inst[1]]);
                     instruction = new Call(programCounter, labelMap[inst[1]]);
                     programCounter += 4;
                     break;
@@ -323,8 +321,6 @@ class Assembler
                     break;
                 case "goto":
                     instruction = new Goto(labelMap[inst[1]] - programCounter);
-                    Console.WriteLine(instruction.Encode());
-                    Console.WriteLine(labelMap[inst[1]]);
                     programCounter += 4;
                     break;
                 case "ifez":
